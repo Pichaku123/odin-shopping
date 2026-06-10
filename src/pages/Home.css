@@ -1,0 +1,39 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    padding: 2rem;
+    text-align: center;
+}
+
+.home-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+}
+
+.home-hero h1 {
+    margin: 0;
+}
+
+.home-hero p {
+    font-size: 1.125rem;
+}
+
+.home-cta {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+    align-self: center;
+}
+
+.home-cta:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+}
