@@ -1,19 +1,27 @@
 # Shopping Cart
 
-A React shopping cart app built with the FakeStore API.
+A full-stack shopping cart app built with React and Express.
 
 ## Features
-- Browse products fetched from FakeStore API
+- Browse products fetched from local Express API
 - Add items to cart, update quantities, remove items
 - Real-time cart total calculation
 - Client-side routing with React Router
 
 ## Tech Stack
-- React
-- React Router
-- FakeStore API
+- React, React Router (frontend)
+- Node.js, Express (backend)
 
 ## Running Locally
+
+**Backend**
+```bash
+cd backend
+npm install
+node server.js
+```
+
+**Frontend**
 ```bash
 npm install
 npm run dev
