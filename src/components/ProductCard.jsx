@@ -1,19 +1,19 @@
 import "./ProductCard.css";
 
-const ProductCard = ({ product, cart, setCart }) => {
-    const handleSetCart = () => {
-        const exists = cart.find((item) => item.id === product.id);
-        if (exists) {
-            //find product, if id in arr is diff than product.id, keep it same, else update quantity
-            setCart(
-                cart.map((item) =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item,
-                ),
-            );
-        } else {
-            setCart([...cart, { ...product, quantity: 1 }]); //first item
+const ProductCard = ({ product, cart, setCart, fetchCart, API_URL }) => {
+    const handleSetCart = async () => {
+        try {
+            const response = await fetch(`${API_URL}/cart`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ product, quantity: 1 }),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to add to cart: ${response.status}`);
+            }
+            await fetchCart();
+        } catch (error) {
+            console.error("Failed to add to cart:", error);
         }
     };
 

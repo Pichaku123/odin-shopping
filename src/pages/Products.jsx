@@ -26,6 +26,8 @@ const Products = () => {
         fetchItems();
     }, []);
 
+    const { fetchCart, API_URL } = useOutletContext();
+
     return (
         <section className="products-container">
             <h1>Products</h1>
@@ -36,6 +38,8 @@ const Products = () => {
                         product={item}
                         cart={cart}
                         setCart={setCart}
+                        fetchCart={fetchCart}
+                        API_URL={API_URL}
                     />
                 ))}
             </div>

@@ -4,16 +4,17 @@ import CartItem from "../components/CartItem";
 import "./Cart.css";
 
 const Cart = () => {
-    const { cart, setCart } = useOutletContext();
-    const total = cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-    );
+    const { cart, setCart, API_URL, fetchCart } = useOutletContext();
+    const total = Array.isArray(cart)
+        ? cart.reduce((sum, item) => {
+              return sum + (item.price || 0) * (item.quantity || 0);
+          }, 0)
+        : 0;
 
     return (
         <section className="cart-container">
             <h1>Shopping Cart</h1>
-            {cart.length === 0 ? (
+            {!Array.isArray(cart) || cart.length === 0 ? (
                 <div className="empty-cart">
                     <p>Your cart is empty</p>
                 </div>
@@ -26,6 +27,7 @@ const Cart = () => {
                                 product={item}
                                 cart={cart}
                                 setCart={setCart}
+                                API_URL={API_URL}
                             />
                         ))}
                     </ul>

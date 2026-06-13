@@ -1,22 +1,42 @@
 import "./CartItem.css";
+import { useOutletContext } from "react-router-dom";
 
-const CartItem = ({ product, cart, setCart }) => {
-    const handleQuantity = (quantity) => {
+const CartItem = ({ product, cart, setCart, API_URL }) => {
+    const { fetchCart } = useOutletContext();
+
+    const handleQuantity = async (quantity) => {
         const newQuantity = quantity + product.quantity;
-        if (newQuantity <= 0)
-            setCart(cart.filter((i) => i.id !== product.id)); //returns the other items with diff id
-        else
-            setCart(
-                cart.map((item) =>
-                    item.id === product.id
-                        ? { ...item, quantity: newQuantity }
-                        : item,
-                ),
-            );
+        try {
+            if (newQuantity <= 0) {
+                const response = await fetch(`${API_URL}/cart/${product.id}`, {
+                    method: "DELETE",
+                });
+                if (!response.ok) throw new Error("Failed to delete");
+                await fetchCart();
+            } else {
+                const response = await fetch(`${API_URL}/cart/${product.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ quantity: newQuantity }),
+                });
+                if (!response.ok) throw new Error("Failed to update");
+                await fetchCart();
+            }
+        } catch (error) {
+            console.error("Failed to update cart:", error);
+        }
     };
 
-    const handleRemove = () => {
-        setCart(cart.filter((item) => item.id !== product.id));
+    const handleRemove = async () => {
+        try {
+            const response = await fetch(`${API_URL}/cart/${product.id}`, {
+                method: "DELETE",
+            });
+            if (!response.ok) throw new Error("Failed to remove");
+            await fetchCart();
+        } catch (error) {
+            console.error("Failed to remove from cart:", error);
+        }
     };
 
     return (
