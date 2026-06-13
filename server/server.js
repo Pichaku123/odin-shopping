@@ -4,22 +4,20 @@ import cors from "cors";
 const app = express();
 const PORT = 8000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Mock Database - Cart items
+//Just a mock DB
 let cart = [];
 let nextId = 1;
 
-// ============ CART ROUTES ============
 
-// GET - Get all cart items
+//GET all cart items
 app.get("/api/cart", (req, res) => {
     res.json(cart);
 });
 
-// GET - Get single cart item by ID
+// GET single cart item by ID
 app.get("/api/cart/:id", (req, res) => {
     const item = cart.find((item) => item.id === parseInt(req.params.id));
 
@@ -30,25 +28,22 @@ app.get("/api/cart/:id", (req, res) => {
     res.json(item);
 });
 
-// POST - Add item to cart
+// POST to add to cart
 app.post("/api/cart", (req, res) => {
     const { product, quantity } = req.body;
 
-    // Validation
     if (!product || !product.id || !product.title || !product.price) {
         return res.status(400).json({
             message: "Invalid product data",
         });
     }
 
-    // Check if item already exists
     const existingItem = cart.find((item) => item.id === product.id);
     if (existingItem) {
         existingItem.quantity += quantity || 1;
         return res.json(cart);
     }
 
-    // Create new cart item
     const newItem = {
         id: product.id,
         title: product.title,
@@ -63,7 +58,7 @@ app.post("/api/cart", (req, res) => {
     res.status(201).json(cart);
 });
 
-// PUT - Update cart item
+// PUT to update item
 app.put("/api/cart/:id", (req, res) => {
     const item = cart.find((item) => item.id === parseInt(req.params.id));
 
@@ -79,7 +74,7 @@ app.put("/api/cart/:id", (req, res) => {
     res.json(cart);
 });
 
-// DELETE - Remove item from cart
+//DELETE 
 app.delete("/api/cart/:id", (req, res) => {
     const index = cart.findIndex((item) => item.id === parseInt(req.params.id));
 
@@ -91,20 +86,18 @@ app.delete("/api/cart/:id", (req, res) => {
     res.json(cart);
 });
 
-// DELETE - Clear entire cart
+//DELETE all cart
 app.delete("/api/cart", (req, res) => {
     const itemCount = cart.length;
     cart = [];
     res.json({ message: `Cart cleared (${itemCount} items removed)` });
 });
-// ============ ERROR HANDLING ============
 
-// 404 handler
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
 });
 
-// Start server
+//port is 8000 for now
 app.listen(PORT, () => {
     console.log(`Server running on localhost:${PORT}`);
     console.log(`API available at localhost:${PORT}/api/cart`);
